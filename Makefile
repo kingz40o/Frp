@@ -25,23 +25,6 @@ frps:
 
 frpc:
 	env CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -o bin/frpc ./cmd/frpc
-
-test: gotest
-
-gotest:
-	go test -v --cover ./assets/...
-	go test -v --cover ./cmd/...
-	go test -v --cover ./client/...
-	go test -v --cover ./server/...
-	go test -v --cover ./pkg/...
-
-e2e:
-	./hack/run-e2e.sh
-
-e2e-trace:
-	DEBUG=true LOG_LEVEL=trace ./hack/run-e2e.sh
-
-alltest: vet gotest e2e
 	
 clean:
 	rm -f ./bin/frpc
