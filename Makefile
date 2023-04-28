@@ -1,31 +1,23 @@
-export PATH := $(GOPATH)/bin:$(PATH)
-export GO111MODULE=on
-LDFLAGS := -s -w
+LDFLAGS=-trimpath -ldflags="-s -w"
 
-all: fmt build
+define build
+	CGO_ENABLED=0 GOOS=$1 GOARCH=$2 go build $(LDFLAGS) -o bin/frpc_$1_$2$3 ./cmd/frpc
+	CGO_ENABLED=0 GOOS=$1 GOARCH=$2 go build $(LDFLAGS) -o bin/frps_$1_$2$3 ./cmd/frps
+endef
 
-build: frps frpc
+all: linux darwin windows
 
-# compile assets into binary file
-file:
-	rm -rf ./assets/frps/static/*
-	rm -rf ./assets/frpc/static/*
+linux:
+	$(call build,linux,386)
+	$(call build,linux,amd64)
 
-fmt:
-	go fmt ./...
+darwin:
+	$(call build,darwin,arm64)
+	$(call build,darwin,amd64)
 
-fmt-more:
-	gofumpt -l -w .
+windows:
+	$(call build,windows,386,.exe)
+	$(call build,windows,amd64,.exe)
 
-vet:
-	go vet ./...
-
-frps:
-	env CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -o bin/frps ./cmd/frps
-
-frpc:
-	env CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -o bin/frpc ./cmd/frpc
-	
 clean:
-	rm -f ./bin/frpc
-	rm -f ./bin/frps
+	rm -rf bin
