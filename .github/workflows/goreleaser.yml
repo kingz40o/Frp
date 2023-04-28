@@ -2,8 +2,6 @@ name: goreleaser
 
 on:
   workflow_dispatch:
-builds:
-    - skip: true
 
 jobs:
   goreleaser:
@@ -21,7 +19,7 @@ jobs:
           
       - name: Make All
         run: |
-          make
+          ./package.sh
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v3
