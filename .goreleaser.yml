@@ -1,20 +1,19 @@
 before:
   hooks:
-
 builds:
    - main: ./cmd/frpc/main.go
     binary: frpc
-  - env:
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
     - main: ./cmd/frps/main.go
-    binary: frps
-  - env:
+      binary: frps
+      env:
       - CGO_ENABLED=0
-    goos:
+      goos:
       - linux
       - windows
       - darwin
