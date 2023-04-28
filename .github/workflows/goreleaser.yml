@@ -2,6 +2,8 @@ name: goreleaser
 
 on:
   workflow_dispatch:
+builds:
+    - skip: true
 
 jobs:
   goreleaser:
